@@ -1,0 +1,44 @@
+# ============================================================
+# Root .gitignore — PM Internship AI Platform
+# ============================================================
+
+# ── Node Modules ─────────────────────────────────────────────
+node_modules/
+*/node_modules/
+
+# ── Environment Variables (NEVER commit these!) ───────────────
+.env
+.env.local
+.env.production
+.env.development
+server/.env
+client/.env
+
+# ── Uploaded Files ────────────────────────────────────────────
+server/uploads/
+uploads/
+
+# ── Build Output ──────────────────────────────────────────────
+client/dist/
+dist/
+build/
+
+# ── Logs ──────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+
+# ── OS Files ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Misc ──────────────────────────────────────────────────────
+.cache/
+*.tgz
