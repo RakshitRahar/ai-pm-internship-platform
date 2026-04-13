@@ -11,6 +11,7 @@ import StudentDashboard from '@/pages/student/StudentDashboard';
 import StudentProfile from '@/pages/student/StudentProfile';
 import StudentApplications from '@/pages/student/StudentApplications';
 import InternshipsPage from '@/pages/student/InternshipsPage';
+import CVBuilderPage from '@/pages/student/CVBuilderPage';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/AdminDashboard';
@@ -59,6 +60,7 @@ export default function App() {
                 <Route path="profile" element={<StudentProfile />} />
                 <Route path="applications" element={<StudentApplications />} />
                 <Route path="internships" element={<InternshipsPage />} />
+                <Route path="cv-builder" element={<CVBuilderPage />} />
             </Route>
 
             {/* Admin Routes */}

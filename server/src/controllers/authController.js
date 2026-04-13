@@ -60,7 +60,7 @@ exports.register = async (req, res, next) => {
 // ─── POST /api/auth/login ─────────────────────────────────────────────────────
 exports.login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, adminKey } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ success: false, message: 'Please provide email and password.' });
@@ -75,6 +75,17 @@ exports.login = async (req, res, next) => {
 
         if (!user.isActive) {
             return res.status(403).json({ success: false, message: 'Account deactivated. Contact support.' });
+        }
+
+        // ── Admin accounts require the secret admin key ───────────────────────
+        if (user.role === ROLES.ADMIN) {
+            const expectedKey = (process.env.ADMIN_LOGIN_KEY || '').trim();
+            if (!adminKey || adminKey.trim() !== expectedKey) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Admin access denied. Invalid admin key.',
+                });
+            }
         }
 
         sendTokenResponse(user, 200, res);

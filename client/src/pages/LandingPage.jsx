@@ -90,9 +90,6 @@ export default function LandingPage() {
                             Apply Now
                             <ArrowRightIcon className="w-5 h-5" />
                         </Link>
-                        <Link to="/login" className="btn btn-ghost btn-lg w-full sm:w-auto">
-                            Admin Login
-                        </Link>
                     </div>
 
                     {/* Trust indicators */}

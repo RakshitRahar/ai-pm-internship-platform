@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/authStore';
 import {
     HomeIcon, BriefcaseIcon, DocumentTextIcon,
     UserCircleIcon, ChevronDownIcon, ArrowRightOnRectangleIcon,
-    Bars3Icon, XMarkIcon, SparklesIcon,
+    Bars3Icon, XMarkIcon, SparklesIcon, DocumentArrowUpIcon,
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import AIChatWidget from '@/components/student/AIChatWidget';
@@ -14,7 +14,9 @@ const navItems = [
     { to: '/dashboard/internships', icon: BriefcaseIcon, label: 'Internships' },
     { to: '/dashboard/applications', icon: DocumentTextIcon, label: 'My Applications' },
     { to: '/dashboard/profile', icon: UserCircleIcon, label: 'Profile' },
+    { to: '/dashboard/cv-builder', icon: DocumentArrowUpIcon, label: 'CV Builder', badge: '₹19' },
 ];
+
 
 export default function StudentLayout() {
     const { user, logout } = useAuthStore();
@@ -64,7 +66,7 @@ export default function StudentLayout() {
 
                 {/* Nav */}
                 <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-                    {navItems.map(({ to, icon: Icon, label, end }) => (
+                    {navItems.map(({ to, icon: Icon, label, end, badge }) => (
                         <NavLink
                             key={to}
                             to={to}
@@ -79,10 +81,16 @@ export default function StudentLayout() {
               `}
                         >
                             <Icon className="w-5 h-5 flex-shrink-0" />
-                            {label}
+                            <span className="flex-1">{label}</span>
+                            {badge && (
+                                <span className="bg-gradient-to-r from-violet-500 to-pink-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-tight">
+                                    {badge}
+                                </span>
+                            )}
                         </NavLink>
                     ))}
                 </nav>
+
 
                 {/* User Profile */}
                 <div className="p-3 border-t border-surface-700">
@@ -118,7 +126,45 @@ export default function StudentLayout() {
                         <Bars3Icon className="w-6 h-6" />
                     </button>
 
-                    <div className="flex-1" />
+                    {/* Marquee Ticker */}
+                    <div className="flex-1 overflow-hidden mx-3 hidden sm:block">
+                        <div style={{
+                            display: 'flex',
+                            overflow: 'hidden',
+                            maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                gap: '0',
+                                animation: 'marquee-scroll 30s linear infinite',
+                                whiteSpace: 'nowrap',
+                            }}>
+                                {[
+                                    '🎯 Apply now for PM Internship Scheme 2025',
+                                    '🏢 500+ seats across India\'s top companies',
+                                    '🤖 AI-powered candidate matching & ranking',
+                                    '💰 ₹5,000/month stipend for selected interns',
+                                    '📅 Application deadline approaching — don\'t miss out!',
+                                    '🌟 Partner companies: Infosys · Tata Motors · Reliance · HDFC Bank · Wipro',
+                                    '🚀 Upload your CV to get AI recommendations instantly',
+                                ].concat([
+                                    '🎯 Apply now for PM Internship Scheme 2025',
+                                    '🏢 500+ seats across India\'s top companies',
+                                    '🤖 AI-powered candidate matching & ranking',
+                                ]).map((msg, i) => (
+                                    <span key={i} style={{
+                                        color: '#94a3b8',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 500,
+                                        paddingRight: '3rem',
+                                    }}>
+                                        {msg}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
 
                     {/* AI Chat Button */}
                     <button

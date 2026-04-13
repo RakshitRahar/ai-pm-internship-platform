@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { userAPI, applicationAPI } from '@/services/api';
+import toast from 'react-hot-toast';
 import CVUpload from '@/components/student/CVUpload';
 import ScoreCard from '@/components/ui/ScoreCard';
 import {
     DocumentArrowUpIcon, BriefcaseIcon, ClockIcon,
-    CheckBadgeIcon, ChartBarIcon, ArrowRightIcon, SparklesIcon,
+    CheckBadgeIcon, ChartBarIcon, ArrowRightIcon, SparklesIcon, CreditCardIcon,
 } from '@heroicons/react/24/outline';
 
 const STATUS_BADGE = {
@@ -26,6 +27,22 @@ export default function StudentDashboard() {
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showUpload, setShowUpload] = useState(false);
+    const [reanalyzing, setReanalyzing] = useState(false);
+
+    const handleReanalyze = async () => {
+        setReanalyzing(true);
+        try {
+            const { data } = await userAPI.reanalyzeCV();
+            setAiAnalysis(data.aiAnalysis);
+            toast.success('CV re-analyzed successfully! 🎉');
+        } catch (err) {
+            const msg = err.response?.data?.message || 'Re-analysis failed. Please try uploading your CV again.';
+            toast.error(msg);
+            if (err.response?.status === 400) setShowUpload(true); // Prompt re-upload if no CV on file
+        } finally {
+            setReanalyzing(false);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,13 +81,19 @@ export default function StudentDashboard() {
 
     return (
         <div className="space-y-6">
+            {/* Page Title */}
+            <div>
+                <h1 className="section-title">Dashboard</h1>
+                <p className="section-subtitle">Your internship hub — applications, CV analysis &amp; recommendations at a glance.</p>
+            </div>
+
             {/* Welcome Banner */}
             <div className="card p-6 bg-gradient-to-r from-primary-600/20 to-accent-600/20 border-primary-500/20">
                 <div className="flex items-start justify-between gap-4">
                     <div>
-                        <h1 className="font-display text-2xl font-bold text-white">
+                        <p className="font-display text-xl font-bold text-white">
                             Welcome back, {user?.firstName}! 👋
-                        </h1>
+                        </p>
                         <p className="text-slate-400 mt-1">
                             {aiAnalysis
                                 ? `Your CV has been analyzed. CV Quality: ${aiAnalysis.cvQualityScore}/100`
@@ -84,6 +107,19 @@ export default function StudentDashboard() {
                         >
                             <DocumentArrowUpIcon className="w-4 h-4" />
                             Upload CV
+                        </button>
+                    ) : !aiAnalysis ? (
+                        <button
+                            onClick={handleReanalyze}
+                            disabled={reanalyzing}
+                            className="btn btn-primary flex-shrink-0"
+                        >
+                            {reanalyzing ? (
+                                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <SparklesIcon className="w-4 h-4" />
+                            )}
+                            {reanalyzing ? 'Analyzing...' : 'Analyze My CV'}
                         </button>
                     ) : (
                         <span className="badge badge-green text-sm">CV Uploaded ✓</span>
@@ -270,6 +306,26 @@ export default function StudentDashboard() {
                         </div>
                     )}
                 </div>
+            </div>
+            {/* CV Builder Promo Banner */}
+            <div className="card p-5 bg-gradient-to-r from-violet-600/20 via-pink-500/10 to-accent-600/20 border-violet-500/20 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <CreditCardIcon className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                    <h3 className="font-bold text-white text-base">
+                        {user?.cv?.filename ? '✨ Upgrade to a professionally designed CV' : '📄 Don\'t have a CV yet? Build one in minutes!'}
+                    </h3>
+                    <p className="text-slate-400 text-sm mt-0.5">
+                        {user?.cv?.filename
+                            ? 'Get a stunning, print-ready PDF CV built from your profile — starting at just ₹19'
+                            : 'Fill a simple form and get a beautiful, job-ready PDF CV for just ₹19 or ₹29'}
+                    </p>
+                </div>
+                <Link to="/dashboard/cv-builder" className="btn btn-sm flex-shrink-0 gap-2" style={{ background: 'linear-gradient(135deg, #7c3aed, #ec4899)', color: 'white', border: 'none' }}>
+                    <SparklesIcon className="w-4 h-4" />
+                    {user?.cv?.filename ? 'Build Better CV →' : 'Build My CV →'}
+                </Link>
             </div>
         </div>
     );

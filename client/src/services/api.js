@@ -7,7 +7,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const api = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.VITE_API_URL || '/api',
     timeout: 30000,
     headers: { 'Content-Type': 'application/json' },
 });
@@ -59,7 +59,9 @@ export const userAPI = {
             timeout: 60000, // Extended timeout for AI processing
         }),
     getCVAnalysis: () => api.get('/users/cv-analysis'),
+    reanalyzeCV: () => api.post('/users/reanalyze-cv', {}, { timeout: 60000 }),
 };
+
 
 // Internships
 export const internshipAPI = {

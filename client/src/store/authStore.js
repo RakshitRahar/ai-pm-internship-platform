@@ -14,10 +14,12 @@ export const useAuthStore = create(
             token: null,
             isLoading: false,
 
-            login: async (email, password) => {
+            login: async (email, password, adminKey) => {
                 set({ isLoading: true });
                 try {
-                    const { data } = await api.post('/auth/login', { email, password });
+                    const payload = { email, password };
+                    if (adminKey) payload.adminKey = adminKey;
+                    const { data } = await api.post('/auth/login', payload);
                     api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
                     set({ user: data.user, token: data.token, isLoading: false });
                     return data;

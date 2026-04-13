@@ -9,7 +9,7 @@ node_modules/
 # ── Environment Variables (NEVER commit these!) ───────────────
 .env
 .env.local
-.env.production
+# .env.production  # Allowed for client (only public VITE_ vars)
 .env.development
 server/.env
 client/.env
@@ -42,3 +42,4 @@ desktop.ini
 # ── Misc ──────────────────────────────────────────────────────
 .cache/
 *.tgz
+

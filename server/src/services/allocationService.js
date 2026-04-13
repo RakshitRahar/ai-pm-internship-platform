@@ -252,26 +252,27 @@ const runSmartAllocation = async (internshipId, adminId, options = {}) => {
 const getRankedCandidates = async (internshipId, filters = {}) => {
     const {
         status,
-        minScore = 0,
-        maxScore = 100,
+        minScore,   // Only filter if explicitly provided (not default 0)
         page = 1,
-        limit = 20,
+        limit = 50,
     } = filters;
 
-    const query = {
-        internship: internshipId,
-        'aiScore.overall': { $gte: minScore, $lte: maxScore },
-    };
+    const query = { internship: internshipId };
+
+    // Only apply score filter when explicitly requested
+    if (minScore !== undefined && minScore !== null && minScore !== '' && minScore !== 0) {
+        query['aiScore.overall'] = { $gte: parseInt(minScore) };
+    }
 
     if (status) query.status = status;
 
-    const skip = (page - 1) * limit;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const [applications, total] = await Promise.all([
         Application.find(query)
-            .sort({ rank: 1, 'aiScore.overall': -1 })
+            .sort({ rank: 1, 'aiScore.overall': -1, createdAt: -1 })
             .skip(skip)
-            .limit(limit)
+            .limit(parseInt(limit))
             .populate('student', 'firstName lastName email university degree skills'),
         Application.countDocuments(query),
     ]);

@@ -97,6 +97,44 @@ export default function AdminLayout() {
                         <Bars3Icon className="w-6 h-6" />
                     </button>
                     <h1 className="font-display font-semibold text-white">Admin Control Panel</h1>
+
+                    {/* Marquee Ticker */}
+                    <div className="flex-1 overflow-hidden mx-4 hidden md:block">
+                        <div style={{
+                            display: 'flex',
+                            overflow: 'hidden',
+                            maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                animation: 'marquee-scroll 28s linear infinite',
+                                whiteSpace: 'nowrap',
+                            }}>
+                                {[
+                                    '📋 PM Internship Scheme 2025 — Admin Panel',
+                                    '👤 74 registered students · 145 applications total',
+                                    '🤖 Run AI Scoring to rank candidates faster',
+                                    '🏆 Top companies: Infosys · Tata · Reliance · SBI · HCL',
+                                    '🎯 Use Smart Allocation to auto-fill internship seats',
+                                    '📊 Check Analytics for real-time platform insights',
+                                ].concat([
+                                    '📋 PM Internship Scheme 2025 — Admin Panel',
+                                    '👤 74 registered students · 145 applications total',
+                                ]).map((msg, i) => (
+                                    <span key={i} style={{
+                                        color: '#64748b',
+                                        fontSize: '0.72rem',
+                                        fontWeight: 500,
+                                        paddingRight: '3rem',
+                                    }}>
+                                        {msg}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="ml-auto flex items-center gap-2">
                         <span className="badge badge-purple">Admin</span>
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-500 to-primary-500 flex items-center justify-center">
