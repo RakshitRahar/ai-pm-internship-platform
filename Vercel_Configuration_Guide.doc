@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; line-height: 1.6; padding: 40px; color: #333; }
+        h1 { text-align: center; text-transform: uppercase; font-size: 18pt; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        h2 { font-size: 14pt; border-left: 5px solid #2F5496; padding-left: 10px; margin-top: 30px; color: #2F5496; text-transform: uppercase; }
+        p, li { font-size: 11pt; text-align: justify; }
+        .box { border: 1px solid #ccc; padding: 15px; background-color: #f2f7ff; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2F5496; color: white; }
+        .code { font-family: 'Courier New', Courier, monospace; background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>Vercel Deployment Configuration Guide</h1>
+
+    <h2>Introduction</h2>
+    <p>To finalize the migration of your <b>AI PM Internship Platform</b> from Render to Vercel, you need to set up the following environment variables. This ensures your site can connect to the database, AI services, and handle security.</p>
+    
+    <h2>1. How to Add Environment Variables</h2>
+    <ol>
+        <li>Log in to your <b>Vercel Dashboard</b>.</li>
+        <li>Select your project: <span class="code">ai-pm-internship</span>.</li>
+        <li>Go to <b>Settings</b> &rarr; <b>Environment Variables</b>.</li>
+        <li>For each row in the table below, enter the <b>Key</b> and the <b>Value</b>, then click <b>Add</b>.</li>
+    </ol>
+
+    <h2>2. Configuration Values (Copy & Paste)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Environment Variable Key</th>
+                <th>Value to Paste</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="code">MONGO_URI</span></td>
+                <td>mongodb+srv://rr:rakshit@cluster0.slmj4k7.mongodb.net/pm_internship?retryWrites=true&w=majority&appName=Cluster0</td>
+            </tr>
+            <tr>
+                <td><span class="code">JWT_SECRET</span></td>
+                <td>pm_internship_super_secret_jwt_key_change_me_2026</td>
+            </tr>
+            <tr>
+                <td><span class="code">OPENAI_API_KEY</span></td>
+                <td>YOUR_OPENAI_API_KEY_HERE</td>
+            </tr>
+            <tr>
+                <td><span class="code">GEMINI_API_KEY</span></td>
+                <td>YOUR_GEMINI_API_KEY_HERE</td>
+            </tr>
+            <tr>
+                <td><span class="code">OPENAI_MODEL</span></td>
+                <td>gpt-4o-mini</td>
+            </tr>
+            <tr>
+                <td><span class="code">ADMIN_SECRET</span></td>
+                <td>pm_admin_secret_2026</td>
+            </tr>
+            <tr>
+                <td><span class="code">ADMIN_LOGIN_KEY</span></td>
+                <td>PMAdminSecureKey2026</td>
+            </tr>
+            <tr>
+                <td><span class="code">NODE_ENV</span></td>
+                <td>production</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box">
+        <p><b>IMPORTANT:</b> You also need to add your <b>Cloudinary</b> keys. Please find these in your Render dashboard:</p>
+        <ul>
+            <li><span class="code">CLOUDINARY_CLOUD_NAME</span></li>
+            <li><span class="code">CLOUDINARY_API_KEY</span></li>
+            <li><span class="code">CLOUDINARY_API_SECRET</span></li>
+        </ul>
+    </div>
+
+    <h2>3. Final Step: Redeploy</h2>
+    <p>After you have added all the variables above:</p>
+    <ol>
+        <li>Go to the <b>Deployments</b> tab in Vercel.</li>
+        <li>Find the latest deployment at the top.</li>
+        <li>Click the three dots (<b>...</b>) on the right and select <b>Redeploy</b>.</li>
+    </ol>
+
+    <p>Once the deployment finishes, your site will be fully operational and significantly faster than before.</p>
+
+</body>
+</html>

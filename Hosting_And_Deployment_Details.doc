@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; line-height: 1.6; padding: 40px; color: #333; }
+        h1 { text-align: center; text-transform: uppercase; font-size: 18pt; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        h2 { font-size: 14pt; border-left: 5px solid #2F5496; padding-left: 10px; margin-top: 30px; color: #2F5496; text-transform: uppercase; }
+        p, li { font-size: 11pt; text-align: justify; }
+        .box { border: 1px solid #ccc; padding: 15px; background-color: #f2f7ff; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h1>Deployment and Hosting Details</h1>
+
+    <h2>Cloud Infrastructure Overview</h2>
+    <p>The system is deployed using a distributed cloud architecture. This ensures that the platform is accessible globally, highly available, and can scale up as more students and recruiters join.</p>
+    
+    <div class="box">
+        <ul>
+            <li><b>Backend API (Render):</b> Our server-side logic and AI processing engine are hosted on the <b>Render</b> platform. It uses automated builds to ensure that any code changes are tested and deployed instantly.</li>
+            <li><b>Frontend Interface (Vercel):</b> The user-facing React application is hosted on <b>Vercel</b>. It utilizes an Edge Network to deliver the application with ultra-low latency to users across India.</li>
+            <li><b>Database (MongoDB Atlas):</b> Student profiles, applications, and internship data are stored in a secure <b>MongoDB Atlas</b> cloud cluster, providing enterprise-grade security and automated backups.</li>
+            <li><b>Media & CV Storage (Cloudinary):</b> Uploaded resumes are stored and served via <b>Cloudinary</b>, which optimizes file retrieval and ensures the web server remains efficient.</li>
+        </ul>
+    </div>
+
+    <h2>Continuous Deployment (CI/CD)</h2>
+    <p>The project follows <b>DevOps</b> best practices by implementing a <b>Continuous Integration and Continuous Deployment</b> pipeline. We have integrated our GitHub repository with Render and Vercel dashboards. This means:</p>
+    <ol>
+        <li>Every code update is automatically analyzed.</li>
+        <li>Build processes run in parallel for the Frontend and Backend.</li>
+        <li>The live site is updated in real-time without any downtime for the users.</li>
+    </ol>
+
+    <h2>Production Security</h2>
+    <p>In the hosted environment, all sensitive keys (like OpenAI and Gemini API keys) are managed using <b>Environment Variables</b> and secret management tools provided by the hosting platforms. This ensures that no credentials are ever exposed in the source code.</p>
+
+</body>
+</html>

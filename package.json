@@ -1,14 +1,12 @@
 {
-  "name": "ai-pm-internship-server",
+  "name": "ai-pm-internship-root",
   "version": "1.0.0",
-  "description": "AI-Based Smart Allocation Engine for PM Internship - Backend API",
-  "main": "src/app.js",
+  "private": true,
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "lint": "eslint src/"
+    "build": "cd client && npm install && npm run build"
   },
   "dependencies": {
+    "serverless-http": "^3.2.0",
     "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.3",
@@ -31,14 +29,7 @@
     "openai": "^4.20.1",
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
-    "serverless-http": "^3.2.0",
     "winston": "^3.11.0",
     "xss-clean": "^0.1.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }

@@ -1,0 +1,61 @@
+PROJECT ALGORITHMS AND FORMULAS REPORT
+
+1. AI ANALYSIS PIPELINE
+The system uses a 3-step pipeline to transform a PDF/Resume into data:
+   Step A: Text Extraction using PDF.js/Docx-parser.
+   Step B: AI Entity Recognition using LLMs (Gemini/GPT-4).
+   Step C: Structured JSON conversion for database storage.
+
+2. SKILL MATCHING ALGORITHM
+This algorithm compares the candidate's skills against the internship requirements.
+
+Formula for Required Skills:
+Required Match % = (Number of Matched Required Skills / Total Required Skills) * 100
+
+Formula for Preferred Skills (Bonus):
+Preferred Bonus % = (Number of Matched Preferred Skills / Total Preferred Skills) * 15
+
+Total Skill Score:
+Skill Match Score = Minimum(100, [Required Match % + Preferred Bonus %])
+
+3. EDUCATION SCORING ALGORITHM
+Evaluates the candidate based on their academic performance.
+
+Base CGPA Score:
+CGPA Score = (Candidate CGPA / 10.0) * 100
+
+Penalty for not meeting Minimum CGPA:
+If Candidate CGPA < Required Min CGPA:
+   Education Score = CGPA Score * 0.7 (30% Penalty)
+Else:
+   Education Score = CGPA Score
+
+4. PROJECT RELEVANCE ALGORITHM
+Scores the candidate's portfolio projects based on their quantity and relevance.
+
+Formula:
+Project Score = (Project Count * 15) + (Number of Relevant Skills used in Projects * 10) + 20
+Note: Max score capped at 100.
+
+5. EXPERIENCE SCORING ALGORITHM
+Based on years of experience relative to internship requirements.
+
+If Requirement is 0 years (Fresher):
+   Exp Score = (Years * 20) + 60
+If Requirement is > 0 years:
+   Exp Score = (Total Years / Required Years) * 60
+
+6. FINAL AI OVERALL RANKING FORMULA
+The final score used to rank candidates is a weighted average of all the above scores.
+
+Overall Score = (Skill Match Score * 0.40) + 
+                (Experience Score * 0.20) + 
+                (Education Score * 0.15) + 
+                (Project Score * 0.15) + 
+                (Keyword Match Score * 0.10)
+
+7. SMART ALLOCATION LOGIC
+The logic used to automatically select candidates:
+   - Rank Assignment: Candidates are sorted by Overall Score (Highest to Lowest).
+   - Selection: Top N candidates are selected where N = Number of Available Seats.
+   - Thresholding: Candidates with an Overall Score below 60% are automatically moved to a "Consider" or "Reject" status.

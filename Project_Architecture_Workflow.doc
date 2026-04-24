@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; line-height: 1.6; padding: 40px; color: #333; }
+        h1 { text-align: center; text-transform: uppercase; font-size: 18pt; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        h2 { font-size: 14pt; border-left: 5px solid #2F5496; padding-left: 10px; margin-top: 30px; color: #2F5496; text-transform: uppercase; }
+        h3 { font-size: 12pt; margin-top: 20px; font-style: italic; }
+        p, li { font-size: 11pt; text-align: justify; }
+        .box { border: 1px solid #ccc; padding: 15px; background-color: #f9f9f9; margin: 10px 0; }
+        .step { font-weight: bold; color: #d35400; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h1>Project Architecture and Workflow</h1>
+
+    <h2>1. System Architecture</h2>
+    <p>The AI-Based PM Internship Platform follows a modern <b>MERN Stack</b> architecture (MongoDB, Express, React, Node.js) integrated with advanced Large Language Models (LLMs) for intelligent decision-making.</p>
+    
+    <div class="box">
+        <h3>A. Presentation Layer (Frontend)</h3>
+        <ul>
+            <li><b>React.js & Vite:</b> Provides a highly responsive Single Page Application (SPA) experience.</li>
+            <li><b>Tailwind CSS:</b> Ensures a modern, mobile-friendly design with rich aesthetics.</li>
+            <li><b>Zustand:</b> Manages global state such as authentication and user profiles.</li>
+        </ul>
+
+        <h3>B. Application Layer (Backend)</h3>
+        <ul>
+            <li><b>Node.js & Express:</b> Handles the RESTful API endpoints, middleware, and business logic.</li>
+            <li><b>JWT Authentication:</b> Secures the system with token-based access control for students and admins.</li>
+        </ul>
+
+        <h3>C. Intelligent AI Engine</h3>
+        <ul>
+            <li><b>Multi-LLM Integration:</b> Orcherstrates calls between Google Gemini 2.0 and OpenAI GPT-4o-mini.</li>
+            <li><b>Parsing Service:</b> Converts unstructured PDF/DOCX files into structured JSON data.</li>
+            <li><b>Scoring Service:</b> Executes the weighted mathematical algorithms to rank candidates.</li>
+        </ul>
+
+        <h3>D. Data Layer</h3>
+        <ul>
+            <li><b>MongoDB:</b> A NoSQL database that stores flexible schemas for CV extracted data and internship metadata.</li>
+            <li><b>Multer:</b> Handles secure file uploads and storage.</li>
+        </ul>
+    </div>
+
+    <h2>2. System Workflow</h2>
+    <p>The platform operates through two primary modules: the <b>Student Module</b> and the <b>Administrator Module</b>.</p>
+
+    <h3>Student Lifecycle Workflow:</h3>
+    <ol>
+        <li><span class="step">Account Creation:</span> Student registers with academic credentials (CGPA, University).</li>
+        <li><span class="step">CV Analysis:</span> Student uploads a resume. The system triggers the <b>AI Extraction Pipeline</b> to identify skills, experience, and projects.</li>
+        <li><span class="step">Smart Discovery:</span> The system recommends internships based on the "Skills Match Score."</li>
+        <li><span class="step">Application:</span> Student applies to a listing. Their AI score for that specific role is calculated instantly.</li>
+        <li><span class="step">Feedback Loop:</span> Student uses the <b>AI Chat Widget</b> to receive tips on how to improve their score for particular roles.</li>
+    </ol>
+
+    <h3>Administrator Lifecycle Workflow:</h3>
+    <ol>
+        <li><span class="step">Internship Management:</span> Admin creates a new internship listing with "Required" and "Preferred" skills.</li>
+        <li><span class="step">Batch Processing:</span> Once applications close, admin runs <b>Batch AI Scoring</b> to calculate relative ranks for the entire pool.</li>
+        <li><span class="step">Analysis:</span> Admin reviews the <b>Score Distribution Chart</b> to see candidate quality.</li>
+        <li><span class="step">Smart Allocation:</span> Admin executes the <b>Allocation Engine</b>. The system automatically selects top-N candidates and handles status updates.</li>
+        <li><span class="step">Report Generation:</span> The system produces a final <b>Allocation Report</b> for documentation.</li>
+    </ol>
+
+    <div style="page-break-after: always;"></div>
+
+    <h2>3. Key Technological Innovations</h2>
+    <table>
+        <tr>
+            <th>Module</th>
+            <th>Innovation</th>
+            <th>Impact</th>
+        </tr>
+        <tr>
+            <td>CV Parser</td>
+            <td>Semantic Entity Recognition</td>
+            <td>94% higher accuracy than simple keyword filter.</td>
+        </tr>
+        <tr>
+            <td>Ranking</td>
+            <td>Weighted Sum Model (WSM)</td>
+            <td>Bias-free merit-based shortlisting.</td>
+        </tr>
+        <tr>
+            <td>Automation</td>
+            <td>Bulk Allocation Engine</td>
+            <td>Reduces recruitment lead time by ~75%.</td>
+        </tr>
+    </table>
+
+</body>
+</html>

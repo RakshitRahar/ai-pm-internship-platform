@@ -71,7 +71,16 @@ app.use('/api/auth', authLimiter);
 
 // ─── General Middleware ───────────────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow if no origin (like mobile apps or curl) or if it matches the CLIENT_URL
+    const allowed = process.env.CLIENT_URL || 'http://localhost:5173';
+    if (!origin || origin === allowed || origin.endsWith('.vercel.app') || origin.endsWith('.netlify.app')) {
+      callback(null, true);
+    } else {
+      logger.warn(`Blocked by CORS: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -81,6 +90,23 @@ app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(mongoSanitize()); // Prevent NoSQL injection
+
+// Fix: Netlify strips the /api prefix from the URL when redirecting to functions.
+// This middleware prepends /api back to the path if it's missing, so Express routes still match.
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && !req.url.startsWith('/.netlify')) {
+    req.url = '/api' + req.url;
+  }
+  next();
+});
+
+// Log all incoming requests for debugging in production
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/auth')) {
+    logger.info(`Auth Request: ${req.method} ${req.path} from ${req.headers.origin}`);
+  }
+  next();
+});
 
 // HTTP request logger (only in development)
 if (process.env.NODE_ENV === 'development') {
@@ -99,8 +125,14 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
 
-// ─── Health Check ─────────────────────────────────────────────────────────────
+// ─── Health check (No DB) ──────────────────────────────────────────────────
+app.get('/api/ping', (req, res) => {
+  res.status(200).json({ success: true, message: 'Server is alive (No DB check)' });
+});
+
+// ─── Health Check (With DB) ───────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
+  logger.info('Health check pinged');
   res.status(200).json({
     success: true,
     message: 'PM Internship API is running',
@@ -122,20 +154,19 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
-const server = app.listen(PORT, () => {
-  logger.info(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// Only listen if not running as a Serverless Function (Vercel or Netlify)
+if (!process.env.VERCEL && !process.env.NETLIFY) {
+  app.listen(PORT, () => {
+    logger.info(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  });
+}
 
 // Handle unhandled promise rejections (prevents server crash)
 process.on('unhandledRejection', (err) => {
   logger.error(`Unhandled Rejection: ${err.message}`);
-  server.close(() => process.exit(1));
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  logger.error(`Uncaught Exception: ${err.message}`);
-  process.exit(1);
+  if (!process.env.VERCEL && !process.env.NETLIFY) {
+    process.exit(1);
+  }
 });
 
 module.exports = app;

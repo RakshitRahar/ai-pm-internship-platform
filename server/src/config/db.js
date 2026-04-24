@@ -6,30 +6,36 @@
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 
+let isConnected = false;
+
 const connectDB = async () => {
+    if (isConnected) {
+        logger.info('Using existing MongoDB connection');
+        return;
+    }
+
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI, {
-            // Modern Mongoose doesn't need deprecated options
+            serverSelectionTimeoutMS: 5000, // 5 second timeout for DB connection
         });
-
+        isConnected = conn.connection.readyState === 1;
         logger.info(`✅ MongoDB Connected: ${conn.connection.host}`);
-
-        // Connection event listeners
-        mongoose.connection.on('disconnected', () => {
-            logger.warn('⚠️  MongoDB disconnected. Attempting to reconnect...');
-        });
-
-        mongoose.connection.on('reconnected', () => {
-            logger.info('✅ MongoDB reconnected successfully');
-        });
-
-        mongoose.connection.on('error', (err) => {
-            logger.error(`❌ MongoDB connection error: ${err.message}`);
-        });
-
+        
+        // Only register listeners once
+        if (isConnected && mongoose.connection.listenerCount('error') === 0) {
+            mongoose.connection.on('error', (err) => {
+                logger.error(`❌ MongoDB connection error: ${err.message}`);
+                isConnected = false;
+            });
+        }
     } catch (error) {
         logger.error(`❌ MongoDB connection failed: ${error.message}`);
-        process.exit(1);
+        // In serverless, we don't want to kill the process immediately; 
+        // the next invocation will try again.
+        if (!process.env.VERCEL && !process.env.NETLIFY) {
+            process.exit(1);
+        }
+        throw error;
     }
 };
 

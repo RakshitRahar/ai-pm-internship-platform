@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL || '/api',
-    timeout: 30000,
+    timeout: 90000, // Increased to 90s to handle Render cold starts
     headers: { 'Content-Type': 'application/json' },
 });
 
@@ -16,7 +16,14 @@ const api = axios.create({
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        const message = error.response?.data?.message || 'An unexpected error occurred';
+        let message = error.response?.data?.message || 'An unexpected error occurred';
+
+        // Specific handling for network errors or timeouts
+        if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+            message = 'Server is taking too long to respond (Cold Start). Please wait a moment and try again.';
+        } else if (error.message === 'Network Error') {
+            message = 'Cannot connect to server. Please check your internet or if the backend is awake.';
+        }
 
         // Handle 401 — clear auth and redirect
         if (error.response?.status === 401) {
@@ -31,8 +38,10 @@ api.interceptors.response.use(
             }
         } else if (error.response?.status >= 500) {
             toast.error('Server error. Please try again later.');
+        } else {
+            toast.error(message);
         }
-        // Let calling code handle 400-level errors specifically
+
         return Promise.reject(error);
     }
 );
