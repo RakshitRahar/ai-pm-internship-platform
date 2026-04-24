@@ -72,9 +72,20 @@ app.use('/api/auth', authLimiter);
 // ─── General Middleware ───────────────────────────────────────────────────────
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow if no origin (like mobile apps or curl) or if it matches the CLIENT_URL
+    // Allow all origins when CLIENT_URL is set to '*' (production open mode)
+    if (process.env.CLIENT_URL === '*') {
+      return callback(null, true);
+    }
     const allowed = process.env.CLIENT_URL || 'http://localhost:5173';
-    if (!origin || origin === allowed || origin.endsWith('.vercel.app') || origin.endsWith('.netlify.app')) {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    // or from known trusted deployment domains
+    if (
+      !origin ||
+      origin === allowed ||
+      origin.endsWith('.vercel.app') ||
+      origin.endsWith('.netlify.app') ||
+      origin.endsWith('.onrender.com')
+    ) {
       callback(null, true);
     } else {
       logger.warn(`Blocked by CORS: ${origin}`);

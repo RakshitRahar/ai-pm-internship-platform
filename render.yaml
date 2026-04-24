@@ -1,44 +1,42 @@
 services:
   - type: web
-    name: ai-pm-internship-api
-    env: node
+    name: ai-pm-internship-backend
+    runtime: node
     rootDir: server
     buildCommand: npm install
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
+      - key: CLIENT_URL
+        value: "*"
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX
+        value: 100
+      - key: MAX_FILE_SIZE
+        value: 10485760
+      - key: UPLOAD_PATH
+        value: ./uploads
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: JWT_COOKIE_EXPIRE
+        value: 7
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      # ── Secret values — set these manually in Render Dashboard ──────────────
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
         sync: false
-      - key: JWT_EXPIRE
-        value: 7d
-      - key: JWT_COOKIE_EXPIRE
-        value: "7"
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: OPENAI_MODEL
-        value: gpt-4o-mini
-      - key: GEMINI_API_KEY
-        sync: false
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
-      - key: MAX_FILE_SIZE
-        value: "10485760"
       - key: ADMIN_SECRET
         sync: false
       - key: ADMIN_LOGIN_KEY
         sync: false
-      - key: CLIENT_URL
+      - key: OPENAI_API_KEY
         sync: false
-      - key: RATE_LIMIT_WINDOW_MS
-        value: "900000"
-      - key: RATE_LIMIT_MAX
-        value: "100"
+      - key: GEMINI_API_KEY
+        sync: false
